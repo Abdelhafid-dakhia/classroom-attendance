@@ -5,15 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const session_1 = __importDefault(require("./routes/session")); // make sure your route file uses export default
+dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 10000;
+// Parse JSON bodies
+app.use(express_1.default.json());
 // API routes
-app.use("/api/sessions", require("./routes/session"));
+app.use('/api/sessions', session_1.default);
 // Serve React build
-app.use(express_1.default.static(path_1.default.join(__dirname, "../client/dist")));
-app.get("*", (_req, res) => {
-    res.sendFile(path_1.default.join(__dirname, "../client/dist/index.html"));
+app.use(express_1.default.static(path_1.default.join(__dirname, '../client/dist')));
+// Catch-all route to serve index.html for client-side routing
+app.get('*', (_req, res) => {
+    res.sendFile(path_1.default.join(__dirname, '../client/dist/index.html'));
 });
+// Start server
 app.listen(PORT, () => {
     console.log(`API + Client ready at http://localhost:${PORT}`);
 });
+``;

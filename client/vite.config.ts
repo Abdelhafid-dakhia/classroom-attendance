@@ -1,12 +1,15 @@
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "strict": true,
-    "outDir": "./dist",
-    "moduleResolution": "node",
-    "skipLibCheck": true
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'), // alias pour src
+    },
   },
-  "include": ["src/**/*.ts"]
-}
+  server: {
+    port: 5173,
+  },
+});

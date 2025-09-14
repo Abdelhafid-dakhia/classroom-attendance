@@ -3,7 +3,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import axios from 'axios';
 import './App.css';
 
-const API = 'http://localhost:4000/api/session';
+const API = 'https://classroom-api-swy0.onrender.com/api/session';
 
 function App() {
   const [nonce, setNonce] = useState<string>('');

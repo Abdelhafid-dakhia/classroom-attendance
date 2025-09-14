@@ -4,4 +4,4 @@ const prisma = new PrismaClient({
   log: ['query', 'error', 'warn'],
 });
 
-export = prisma;
+export default prisma;
