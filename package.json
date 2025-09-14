@@ -1,0 +1,17 @@
+{
+  "name": "classroom-attendance",
+  "version": "1.0.0",
+  "description": "Professional QR attendance system",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "postinstall": "prisma generate"
+  },
+  "keywords": ["qr", "attendance", "typescript", "prisma"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
