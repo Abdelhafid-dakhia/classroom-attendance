@@ -3,15 +3,22 @@
   "version": "1.0.0",
   "description": "Professional QR attendance system",
   "main": "dist/server.js",
-  "scripts": {
-    "build": "tsc",
-    "lint": "eslint src --ext .ts",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "postinstall": "prisma generate"
-  },
-  "keywords": ["qr", "attendance", "typescript", "prisma"],
+"scripts": {
+  "build": "prisma generate && tsc",
+  "start": "node dist/server.js",
+  "lint": "eslint src --ext .ts",
+  "format": "prettier --write \"src/**/*.ts\""
+},
+  "keywords": [
+    "qr",
+    "attendance",
+    "typescript",
+    "prisma"
+  ],
   "author": "",
   "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "@prisma/client": "^6.16.1",
+    "prisma": "^6.16.1"
+  }
 }
