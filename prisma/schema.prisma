@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"   // use "mysql" or "sqlite" if that's your DB
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id         String       @id @default(cuid())
+  courseName String
+  teacher    String
+  qrNonce    String       @unique @default(uuid())
+  createdAt  DateTime     @default(now())
+  attendance Attendance[]
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  sessionId String
+  fullName  String
+  studentId String
+  email     String?
+  submitted DateTime @default(now())
+
+  session Session @relation(fields: [sessionId], references: [id])
+}
