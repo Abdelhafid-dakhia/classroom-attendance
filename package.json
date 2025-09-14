@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Professional QR attendance system",
   "main": "dist/server.js",
-"scripts": {
-  "build": "prisma generate && tsc",
-  "postdeploy": "prisma migrate deploy"
-},
+  "scripts": {
+    "build": "prisma generate && tsc",
+    "postdeploy": "prisma migrate deploy"
+  },
   "keywords": [
     "qr",
     "attendance",
@@ -17,6 +17,15 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^6.16.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
     "prisma": "^6.16.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.3"
   }
 }
