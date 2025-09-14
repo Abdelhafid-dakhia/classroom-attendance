@@ -1,23 +1,19 @@
-import express = require('express');
-import cors = require('cors');
-import * as dotenv from 'dotenv';
-import sessionRoutes from './routes/session';
-import * as path from 'path';
-
-dotenv.config();
+import express from "express";
+import path from "path";
 
 const app = express();
-const PORT = process.env.PORT || 4000;
-
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 10000;
 
 // API routes
-app.get('/health', (_, res) => res.send('OK'));
-app.use('/api/session', sessionRoutes);
+app.use("/api/sessions", require("./routes/session"));
 
-// servir le build React
-app.use(express.static(path.join(__dirname, '../client/dist')));
-app.get('*', (_: any, res: any) => res.sendFile(path.join(__dirname, '../client/dist/index.html')));
+// Serve React build
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
-app.listen(PORT, () => console.log(`API ready at http://localhost:${PORT}`));
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
+
+app.listen(PORT, () => {
+  console.log(`API + Client ready at http://localhost:${PORT}`);
+});
