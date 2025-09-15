@@ -1,3 +1,4 @@
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,22 +9,21 @@ datasource db {
 }
 
 model Session {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   courseName String
-  teacher   String
-  qrNonce   String?   @unique
-  createdAt DateTime @default(now())
+  teacher    String
+  qrNonce    String @unique
+  createdAt  DateTime  @default(now())   // <-- add this
   Attendance Attendance[]
 }
 
 model Attendance {
   id        Int      @id @default(autoincrement())
+  sessionId Int
   fullName  String
   studentId String
-  email     String?
-  createdAt DateTime @default(now())
+  email     String
+  createdAt DateTime @default(now())    // <-- add this
 
-  // relation to session
-  sessionId Int
-  session   Session @relation(fields: [sessionId], references: [id])
+  session Session @relation(fields: [sessionId], references: [id])
 }
