@@ -3,26 +3,27 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"   // use "mysql" or "sqlite" if that's your DB
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Session {
-  id         String       @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   courseName String
-  teacher    String
-  qrNonce    String       @unique @default(uuid())
-  createdAt  DateTime     @default(now())
-  attendance Attendance[]
+  teacher   String
+  qrNonce   String?   @unique
+  createdAt DateTime @default(now())
+  Attendance Attendance[]
 }
 
 model Attendance {
-  id        String   @id @default(cuid())
-  sessionId String
+  id        Int      @id @default(autoincrement())
   fullName  String
   studentId String
   email     String?
-  submitted DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  session Session @relation(fields: [sessionId], references: [id])
+  // relation to session
+  sessionId Int
+  session   Session @relation(fields: [sessionId], references: [id])
 }
