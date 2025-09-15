@@ -3,16 +3,13 @@ services:
     name: classroom-attendance
     env: node
     buildCommand: |
-      # Install backend deps
-      npm ci
-      # Generate Prisma client & build server
-      npx prisma generate --schema=./prisma/schema.prisma
-      npx tsc
-
-      # Install client deps & build frontend
       cd client
       npm ci
       npm run build
+      cd ..
+      npm ci
+      npx prisma generate --schema=./prisma/schema.prisma
+      npx tsc
     startCommand: node dist/server.js
     envVars:
       - key: DATABASE_URL
