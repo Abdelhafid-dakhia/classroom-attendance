@@ -36,8 +36,8 @@ router.post('/attendance', async (req, res) => {
 // GET /api/session/:id/report → liste des présents
 router.get('/:id/report', async (req, res) => {
     const list = await prisma_1.default.attendance.findMany({
-        where: { sessionId: req.params.id },
-        orderBy: { submitted: 'asc' },
+        where: { sessionId: parseInt(req.params.id) },
+        orderBy: { createdAt: 'asc' },
     });
     res.json(list);
 });
