@@ -13,11 +13,12 @@ const router = (0, express_1.Router)();
 router.post('/', async (req, res) => {
     try {
         const { courseName, teacher } = req.body;
+        // qrNonce is required in schema
         const session = await prisma_1.default.session.create({
             data: {
                 courseName,
                 teacher,
-                qrNonce: (0, crypto_1.randomBytes)(8).toString('hex'), // generate unique nonce
+                qrNonce: (0, crypto_1.randomBytes)(8).toString('hex'), // <-- required
             },
         });
         res.json({
@@ -27,6 +28,7 @@ router.post('/', async (req, res) => {
                 qrNonce: session.qrNonce,
                 courseName: session.courseName,
                 teacher: session.teacher,
+                createdAt: session.createdAt,
             },
         });
     }
@@ -45,9 +47,10 @@ router.get('/', async (_req, res) => {
                 qrNonce: true,
                 courseName: true,
                 teacher: true,
+                createdAt: true,
             },
             orderBy: {
-                createdAt: 'desc', // ordering by existing field
+                createdAt: 'desc', // works because schema has createdAt
             },
         });
         res.json(sessions);
@@ -68,6 +71,7 @@ router.get('/:nonce', async (req, res) => {
                 qrNonce: true,
                 courseName: true,
                 teacher: true,
+                createdAt: true,
             },
         });
         if (!session)
@@ -105,6 +109,7 @@ router.post('/:nonce/attendance', async (req, res) => {
                 fullName: attendance.fullName,
                 studentId: attendance.studentId,
                 email: attendance.email,
+                createdAt: attendance.createdAt,
             },
         });
     }
@@ -118,8 +123,8 @@ router.post('/:nonce/attendance', async (req, res) => {
 router.get('/:id/attendances', async (req, res) => {
     try {
         const attendances = await prisma_1.default.attendance.findMany({
-            where: { sessionId: Number(req.params.id) }, // convert string to number
-            orderBy: { createdAt: 'asc' }, // must be an existing field
+            where: { sessionId: Number(req.params.id) },
+            orderBy: { createdAt: 'asc' }, // works because schema has createdAt
         });
         res.json(attendances);
     }
