@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const API = 'http://localhost:4000/api/session';
+const API = 'https://classroom-api-swy0.onrender.com/api/sessions'; 
 
 export default function Attend() {
   const { nonce } = useParams<{ nonce: string }>();
@@ -13,12 +13,19 @@ export default function Attend() {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    axios.get(`${API}/${nonce}`).then(({ data }) => setSession(data)).catch(() => alert('QR invalide'));
+    axios
+      .get(`${API}/${nonce}`)
+      .then(({ data }) => setSession(data))
+      .catch(() => alert('QR invalide'));
   }, [nonce]);
 
   const submit = async () => {
     if (!fullName || !studentId) return alert('Nom et numéro requis');
-    await axios.post(`${API}/attendance`, { sessionId: session.id, fullName, studentId, email });
+    await axios.post(`${API}/${nonce}/attendance`, {
+      fullName,
+      studentId,
+      email,
+    });
     setSent(true);
   };
 
@@ -30,9 +37,21 @@ export default function Attend() {
       <h2>
         {session.courseName} – {session.teacher}
       </h2>
-      <input placeholder="Nom complet" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-      <input placeholder="Numéro étudiant" value={studentId} onChange={(e) => setStudentId(e.target.value)} />
-      <input placeholder="Email (optionnel)" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <input
+        placeholder="Nom complet"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+      />
+      <input
+        placeholder="Numéro étudiant"
+        value={studentId}
+        onChange={(e) => setStudentId(e.target.value)}
+      />
+      <input
+        placeholder="Email (optionnel)"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
       <button onClick={submit}>Valider ma présence</button>
     </div>
   );

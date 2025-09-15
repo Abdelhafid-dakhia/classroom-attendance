@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import App from './App';
-import Attend from './Attend';
+import App from './App';      // If App.tsx exists
+import Attend from './Attend'; // If Attend.tsx exists
 import './index.css';
 
 const router = createBrowserRouter([
