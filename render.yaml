@@ -2,10 +2,22 @@ services:
   - type: web
     name: classroom-attendance
     env: node
-    buildCommand: npm install && npm run build && cd client && npm install && npm run build
+    buildCommand: |
+      # Install backend deps
+      npm ci
+      # Generate Prisma client & build server
+      npx prisma generate --schema=./prisma/schema.prisma
+      npx tsc
+
+      # Install client deps & build frontend
+      cd client
+      npm ci
+      npm run build
     startCommand: node dist/server.js
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: neondb
           property: connectionString
+      - key: NODE_ENV
+        value: production
