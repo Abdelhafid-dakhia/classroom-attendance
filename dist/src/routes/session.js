@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const crypto_1 = require("crypto");
 const express_1 = require("express");
 const prisma_1 = __importDefault(require("../services/prisma"));
 const router = (0, express_1.Router)();
@@ -13,7 +12,7 @@ router.post('/', async (req, res) => {
     if (!courseName || !teacher)
         return res.status(400).json({ error: 'Missing fields' });
     const session = await prisma_1.default.session.create({
-        data: { courseName, teacher, qrNonce: (0, crypto_1.randomUUID)() },
+        data: { courseName, teacher, qrNonce: crypto.randomUUID() },
     });
     res.json({ nonce: session.qrNonce, id: session.id });
 });

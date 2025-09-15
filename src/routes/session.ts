@@ -11,13 +11,14 @@ router.post('/', async (req, res) => {
   try {
     const { courseName, teacher } = req.body;
 
-    const session = await prisma.session.create({
-      data: {
-        courseName,
-        teacher,
-        qrNonce: randomBytes(8).toString('hex'), // generate unique nonce
-      },
-    });
+    // qrNonce is required in schema
+   const session = await prisma.session.create({
+  data: {
+    courseName,
+    teacher,
+    qrNonce: randomBytes(8).toString('hex'), // <-- required
+  },
+});
 
     res.json({
       message: 'Session created',
@@ -26,6 +27,7 @@ router.post('/', async (req, res) => {
         qrNonce: session.qrNonce,
         courseName: session.courseName,
         teacher: session.teacher,
+        createdAt: session.createdAt,
       },
     });
   } catch (err: any) {
@@ -44,11 +46,13 @@ router.get('/', async (_req, res) => {
         qrNonce: true,
         courseName: true,
         teacher: true,
+        createdAt: true,
       },
       orderBy: {
-        createdAt: 'desc', // ordering by existing field
+        createdAt: 'desc', // works because schema has createdAt
       },
     });
+
     res.json(sessions);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -67,6 +71,7 @@ router.get('/:nonce', async (req, res) => {
         qrNonce: true,
         courseName: true,
         teacher: true,
+        createdAt: true,
       },
     });
 
@@ -107,6 +112,7 @@ router.post('/:nonce/attendance', async (req, res) => {
         fullName: attendance.fullName,
         studentId: attendance.studentId,
         email: attendance.email,
+        createdAt: attendance.createdAt,
       },
     });
   } catch (err: any) {
@@ -120,8 +126,8 @@ router.post('/:nonce/attendance', async (req, res) => {
 router.get('/:id/attendances', async (req, res) => {
   try {
     const attendances = await prisma.attendance.findMany({
-      where: { sessionId: Number(req.params.id) }, // convert string to number
-      orderBy: { createdAt: 'asc' }, // must be an existing field
+      where: { sessionId: Number(req.params.id) },
+      orderBy: { createdAt: 'asc' }, // works because schema has createdAt
     });
 
     res.json(attendances);
